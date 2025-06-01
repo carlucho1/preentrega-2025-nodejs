@@ -4,7 +4,7 @@ import { argv } from "process"
 
 let [, , method, resource, title, price, category] = argv;
 
-console.log(method, resource, title, price, category)
+// console.log(method, resource, title, price, category)
 
 // Paso todo a minúscula para asegurararme una correcta comparación en las diferentes consignas
 method = method.toLowerCase();
@@ -24,7 +24,7 @@ if (method == 'get' && resource == 'products') {
 }
 // 2° consigna - Consultar un Producto Específico. Sintaxis --> npm run start GET products/<productId>. Ejemplo: npm run start GET products/15. Utilizamos backtick para formar la cadena correctamente con el id del producto
 
-if (method == "get" && resource == `products/${id}` && id != '') {
+else if (method == "get" && resource == `products/${id}` && id != '') {
     fetch(`https://fakestoreapi.com/products/${id}`)
       .then((response) => response.json())
       .then((data) => console.log(data))
@@ -32,9 +32,9 @@ if (method == "get" && resource == `products/${id}` && id != '') {
 
 // 3° consigna - Creación de un nuevo producto. Sintaxis --> npm run start POST products <title> <price> <categoria>. Ejemplo: npm run start POST products T-Shirt-Rex 300 remeras
 
-if (method == "post" && resource == 'products') {
+else if (method == "post" && resource == 'products' && title != null && price != null && category != null) {
     // Creo un objeto del tipo product con las llaves indicadas: title, price y category
-    const product = { title: title, price: parseInt(price), category: category};
+    const product = { title: title, price: parseFloat(price), category: category};
     fetch("https://fakestoreapi.com/products", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -43,14 +43,19 @@ if (method == "post" && resource == 'products') {
       .then((response) => response.json())
       .then((data) => console.log(data));
 }
+    
+// 4° consigna - Eliminación de un producto. Sintaxis --> npm run start DELETE products/<productId>. Ejemplo: npm run start DELETE products/7
 
-
-
-
-
-// else {
-//     console.log("La consulta no cumple con la sintaxis solicitada");
-//   }
+else if (method == "delete" && resource == `products/${id}` && id != '') {
+    fetch(`https://fakestoreapi.com/products/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+}
+else {
+    console.log("La consulta no cumple con la sintaxis solicitada");
+  }
 
 
 
